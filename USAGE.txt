@@ -1,0 +1,7 @@
+=====
+Usage
+=====
+
+To use Namelist Rendering in a project::
+
+    import nl_rendering
