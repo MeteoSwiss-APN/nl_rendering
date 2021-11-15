@@ -7,6 +7,7 @@ import click
 
 # Local
 from . import __version__
+from .nl_rendering import render_namelist
 from .utils import count_to_log_level
 
 
@@ -30,12 +31,16 @@ from .utils import count_to_log_level
     is_flag=True,
     help="Print version",
 )
+@click.argument("jinja2_template", type=click.Path(exists=True))
+@click.option("--output-file", type=str, default=None, help="Location of output file")
+@click.option(
+    "--include-dir",
+    type=str,
+    default=None,
+    help="Set directory from where subtemplates can be loaded",
+)
 def main(*, dry_run: bool, verbose: int, version: bool) -> None:
     logging.basicConfig(level=count_to_log_level(verbose))
-
-    logging.warning("This is a warning.")
-    logging.info("This is an info message.")
-    logging.debug("This is a debug message.")
 
     if version:
         click.echo(__version__)
@@ -45,7 +50,4 @@ def main(*, dry_run: bool, verbose: int, version: bool) -> None:
         click.echo("Is dry run")
         return
 
-    click.echo(
-        "Replace this message by putting your code into test_cli_project.cli.main"
-    )
-    click.echo("See click documentation at http://click.pocoo.org/")
+    render_namelist(jinja2_template, output_file, include_dir)
